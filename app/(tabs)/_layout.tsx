@@ -1,7 +1,7 @@
 import { Link, Tabs } from 'expo-router';
 import { Button, useTheme } from 'tamagui';
-import { Atom, Lightbulb, Plus } from '@tamagui/lucide-icons';
-import { LightbulbGroup } from 'components/lightbulbGroup';
+import { Lightbulb, Plus } from '@tamagui/lucide-icons';
+import { LightbulbGroup } from 'components/lightbulbGroupSVG';
 
 export default function TabLayout() {
   const theme = useTheme();

@@ -6,6 +6,7 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { Provider } from './Provider';
+import ConnectBridge from 'components/connectBridge';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -46,6 +47,7 @@ function RootLayoutNav() {
   return (
     <Provider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <ConnectBridge />
         <Stack>
           <Stack.Screen
             name="(tabs)"
