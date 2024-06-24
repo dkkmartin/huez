@@ -270,7 +270,6 @@ export default function ConnectBridge() {
             <XStack flex={0.25} alignItems="flex-end">
               <Button
                 onPress={() => {
-                  setIP(manuallyIP);
                   setCanConnectToBridge(true);
                   setLoading(true);
                 }}
