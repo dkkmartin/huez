@@ -47,7 +47,7 @@ function RootLayoutNav() {
   return (
     <Provider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <ConnectBridge />
+        {/*<ConnectBridge />*/}
         <Stack>
           <Stack.Screen
             name="(tabs)"

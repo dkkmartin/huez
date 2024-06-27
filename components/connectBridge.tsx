@@ -4,6 +4,7 @@ import { ActivityIndicator } from 'react-native';
 import { useEffect, useState } from 'react';
 import { getHueKey } from 'lib/hue';
 import { Check, MoveRight } from '@tamagui/lucide-icons';
+import { Appearance } from 'react-native';
 
 interface BridgesListType {
   id: string;
@@ -12,6 +13,8 @@ interface BridgesListType {
 }
 
 export default function ConnectBridge() {
+  const colorScheme = Appearance.getColorScheme();
+  const darkOrLightColor = colorScheme === 'dark' ? '#fff' : '#000';
   const [tooManyRequests, setTooManyRequests] = useState(false);
   const [loading, setLoading] = useState(false);
   const [clicked, setClicked] = useState(false);
@@ -20,12 +23,12 @@ export default function ConnectBridge() {
   const [canConnectToBridge, setCanConnectToBridge] = useState(false);
   const [canBridgeLink, setCanBridgeLink] = useState(false);
   const [linkSuccess, setLinkSuccess] = useState(false);
+  const [bridgeKey, setBridgeKey] = useState('');
   const [selectedIP, setSelectedIP] = useState('');
   const [manuallyIP, setManuallyIP] = useState('');
   const [bridgesList, setBridgesList] = useState<BridgesListType[]>([]);
 
   function setIP(ip: string) {
-    2;
     setSelectedIP(ip);
   }
 
@@ -42,6 +45,7 @@ export default function ConnectBridge() {
         if (response[0].error.description === 'link button not pressed') {
           setCanBridgeLink(true);
         } else {
+          setBridgeKey(response[0].success.username);
           setLinkSuccess(true);
         }
       } catch (error) {
@@ -52,10 +56,6 @@ export default function ConnectBridge() {
       handleHueConnection();
     }
   }, [canConnectToBridge, selectedIP]);
-
-  useEffect(() => {
-    console.log(canBridgeLink);
-  }, [canBridgeLink]);
 
   useEffect(() => {
     async function getBridgesList() {
@@ -90,6 +90,10 @@ export default function ConnectBridge() {
       setCanFetchBridge(true);
     }
   }, [clicked]);
+
+  useEffect(() => {
+    console.log(bridgeKey);
+  }, [bridgeKey]);
 
   return (
     <Sheet
@@ -170,7 +174,7 @@ export default function ConnectBridge() {
                     style={{ transform: [{ scaleX: 4 }, { scaleY: 4 }] }}
                   />
                 ) : (
-                  <HueBridgeSVG size={200} />
+                  <HueBridgeSVG size={200} color={darkOrLightColor} />
                 )}
               </XStack>
 
@@ -265,7 +269,7 @@ export default function ConnectBridge() {
                 size={100}
                 style={{ position: 'absolute', left: -50 }}
               ></MoveRight>
-              <HueBridgeSVG size={200} />
+              <HueBridgeSVG size={200} color={darkOrLightColor} />
             </XStack>
             <XStack flex={0.25} alignItems="flex-end">
               <Button

@@ -1,6 +1,6 @@
 import { Link, Tabs } from 'expo-router';
 import { Button, useTheme } from 'tamagui';
-import { Lightbulb, Plus } from '@tamagui/lucide-icons';
+import { Lightbulb, Plus, Settings } from '@tamagui/lucide-icons';
 import { LightbulbGroup } from 'components/svg/lightbulbGroupSVG';
 
 export default function TabLayout() {
@@ -27,10 +27,26 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="groups"
         options={{
           title: 'Groups',
           tabBarIcon: ({ color }) => <LightbulbGroup color={color} />,
+        }}
+      />
+
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: 'Settings',
+          tabBarIcon: ({ color }) => <Settings color={color} />,
+        }}
+      />
+
+      <Tabs.Screen
+        name="ConnectBridgePage"
+        options={{
+          title: 'Connect bridge',
+          href: null,
         }}
       />
     </Tabs>
