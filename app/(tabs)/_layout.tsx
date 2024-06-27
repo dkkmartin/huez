@@ -18,7 +18,7 @@ export default function TabLayout() {
           title: 'Lights',
           tabBarIcon: ({ color }) => <Lightbulb color={color} />,
           headerRight: () => (
-            <Link href="/modal" asChild>
+            <Link href="/modalNewLight" asChild>
               <Button mr="$4" variant="outlined">
                 <Plus></Plus>
               </Button>
@@ -31,6 +31,13 @@ export default function TabLayout() {
         options={{
           title: 'Groups',
           tabBarIcon: ({ color }) => <LightbulbGroup color={color} />,
+          headerRight: () => (
+            <Link href="/modalNewGroup" asChild>
+              <Button mr="$4" variant="outlined">
+                <Plus></Plus>
+              </Button>
+            </Link>
+          ),
         }}
       />
 
