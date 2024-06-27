@@ -1,9 +1,9 @@
 export interface Root {
   errors: any[];
-  data: Daum[];
+  data: Device[];
 }
 
-export interface Daum {
+export interface Device {
   id: string;
   id_v1: string;
   product_data: ProductData;
