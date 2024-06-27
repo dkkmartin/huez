@@ -57,9 +57,20 @@ function RootLayoutNav() {
           />
 
           <Stack.Screen
-            name="modal"
+            name="modalNewLight"
             options={{
               title: 'New Hue',
+              presentation: 'modal',
+              animation: 'slide_from_right',
+              gestureEnabled: true,
+              gestureDirection: 'horizontal',
+            }}
+          />
+
+          <Stack.Screen
+            name="modalNewGroup"
+            options={{
+              title: 'New group',
               presentation: 'modal',
               animation: 'slide_from_right',
               gestureEnabled: true,
