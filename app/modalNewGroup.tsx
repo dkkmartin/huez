@@ -1,7 +1,7 @@
 import { Check, ChevronDown, ChevronRight, ChevronUp } from '@tamagui/lucide-icons';
 import { useMemo, useState } from 'react';
 import { LinearGradient } from 'react-native-svg';
-import { Label } from 'tamagui';
+import { Button, Label } from 'tamagui';
 import { SelectProps } from 'tamagui';
 import {
   Adapt,
@@ -27,11 +27,46 @@ const mockup = [
 ];
 
 const items = [
-  { name: 'Kitchen' },
-  { name: 'Living room' },
-  { name: 'Bathroom' },
-  { name: 'Garage' },
-  { name: 'Office' },
+  { name: 'Living room', key: 'living_room' },
+  { name: 'Kitchen', key: 'kitchen' },
+  { name: 'Dining room', key: 'dining' },
+  { name: 'Bedroom', key: 'bedroom' },
+  { name: 'Kids bedroom', key: 'kids_bedroom' },
+  { name: 'Bathroom', key: 'bathroom' },
+  { name: 'Nursery', key: 'nursery' },
+  { name: 'Recreation room', key: 'recreation' },
+  { name: 'Office', key: 'office' },
+  { name: 'Gym', key: 'gym' },
+  { name: 'Hallway', key: 'hallway' },
+  { name: 'Toilet', key: 'toilet' },
+  { name: 'Front door', key: 'front_door' },
+  { name: 'Garage', key: 'garage' },
+  { name: 'Terrace', key: 'terrace' },
+  { name: 'Garden', key: 'garden' },
+  { name: 'Driveway', key: 'driveway' },
+  { name: 'Carport', key: 'carport' },
+  { name: 'Home', key: 'home' },
+  { name: 'Downstairs', key: 'downstairs' },
+  { name: 'Upstairs', key: 'upstairs' },
+  { name: 'Top floor', key: 'top_floor' },
+  { name: 'Attic', key: 'attic' },
+  { name: 'Guest room', key: 'guest_room' },
+  { name: 'Staircase', key: 'staircase' },
+  { name: 'Lounge', key: 'lounge' },
+  { name: 'Man cave', key: 'man_cave' },
+  { name: 'Computer room', key: 'computer' },
+  { name: 'Studio', key: 'studio' },
+  { name: 'Music room', key: 'music' },
+  { name: 'TV room', key: 'tv' },
+  { name: 'Reading room', key: 'reading' },
+  { name: 'Closet', key: 'closet' },
+  { name: 'Storage room', key: 'storage' },
+  { name: 'Laundry room', key: 'laundry_room' },
+  { name: 'Balcony', key: 'balcony' },
+  { name: 'Porch', key: 'porch' },
+  { name: 'Barbecue area', key: 'barbecue' },
+  { name: 'Pool', key: 'pool' },
+  { name: 'Other', key: 'other' },
 ];
 
 function SelectItem(props: SelectProps) {
@@ -39,8 +74,8 @@ function SelectItem(props: SelectProps) {
 
   return (
     <Select value={val} onValueChange={setVal} disablePreventBodyScroll {...props}>
-      <Select.Trigger width={220} iconAfter={ChevronDown}>
-        <Select.Value placeholder="Something" />
+      <Select.Trigger width={340} iconAfter={ChevronDown}>
+        <Select.Value placeholder="Bedroom" />
       </Select.Trigger>
 
       <Adapt when="sm" platform="touch">
@@ -76,6 +111,7 @@ function SelectItem(props: SelectProps) {
             <ChevronUp size={20} />
           </YStack>
           <LinearGradient
+            //@ts-ignore
             start={[0, 0]}
             end={[0, 1]}
             fullscreen
@@ -84,17 +120,10 @@ function SelectItem(props: SelectProps) {
           />
         </Select.ScrollUpButton>
 
-        <Select.Viewport
-          // to do animations:
-          // animation="quick"
-          // animateOnly={['transform', 'opacity']}
-          // enterStyle={{ o: 0, y: -10 }}
-          // exitStyle={{ o: 0, y: 10 }}
-          minWidth={200}
-        >
+        <Select.Viewport minWidth={200}>
           <Select.Group>
-            <Select.Label>Fruits</Select.Label>
-            {/* for longer lists memoizing these is useful */}
+            <Select.Label>Rooms</Select.Label>
+
             {useMemo(
               () =>
                 items.map((item, i) => {
@@ -110,7 +139,7 @@ function SelectItem(props: SelectProps) {
               [items]
             )}
           </Select.Group>
-          {/* Native gets an extra icon */}
+
           {props.native && (
             <YStack
               position="absolute"
@@ -138,6 +167,7 @@ function SelectItem(props: SelectProps) {
             <ChevronDown size={20} />
           </YStack>
           <LinearGradient
+            //@ts-ignore
             start={[0, 0]}
             end={[0, 1]}
             fullscreen
@@ -152,19 +182,27 @@ function SelectItem(props: SelectProps) {
 
 export default function ModalScreen() {
   return (
-    <View flex={1} alignItems="center" paddingVertical="$4">
-      <H1>Add new group</H1>
+    <XStack paddingVertical="$4" flex={1} flexDirection="column" alignItems="center" gap="$4">
+      <XStack flexDirection="column" width={340}>
+        <Label fontSize={20} htmlFor="select">
+          Select a room type
+        </Label>
+        <SelectItem id="select" />
+      </XStack>
 
-      <XStack
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-        gap="$4"
-        paddingTop="$4"
-      >
-        <SelectItem />
+      <XStack flexDirection="column">
+        <Label fontSize={20} htmlFor="devices">
+          Select devices
+        </Label>
 
-        <YGroup alignSelf="center" bordered width={340} size="$5" separator={<Separator />}>
+        <YGroup
+          id="devices"
+          alignSelf="center"
+          bordered
+          width={340}
+          size="$5"
+          separator={<Separator />}
+        >
           {mockup.map((device, index) => (
             <YGroup.Item key={index}>
               <ListItem
@@ -178,6 +216,12 @@ export default function ModalScreen() {
           ))}
         </YGroup>
       </XStack>
-    </View>
+
+      <XStack flex={1} alignItems="flex-end">
+        <Button variant="outlined" width={340}>
+          Complete
+        </Button>
+      </XStack>
+    </XStack>
   );
 }
