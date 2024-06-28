@@ -1,5 +1,22 @@
-import { ChevronRight, Moon, Star } from '@tamagui/lucide-icons';
-import { Anchor, H1, ListItem, Paragraph, Separator, View, XStack, YGroup } from 'tamagui';
+import { Check, ChevronDown, ChevronRight, ChevronUp } from '@tamagui/lucide-icons';
+import { useMemo, useState } from 'react';
+import { LinearGradient } from 'react-native-svg';
+import { Button, Label } from 'tamagui';
+import { SelectProps } from 'tamagui';
+import {
+  Adapt,
+  FontSizeTokens,
+  H1,
+  ListItem,
+  Separator,
+  Sheet,
+  View,
+  XStack,
+  YGroup,
+  YStack,
+  getFontSize,
+} from 'tamagui';
+import { Select } from 'tamagui';
 
 const mockup = [
   { id: '21dsan39da', name: 'Hue bulb' },
@@ -11,10 +28,20 @@ const mockup = [
 
 export default function ModalScreen() {
   return (
-    <View flex={1} alignItems="center" paddingVertical="$4">
-      <H1 flex={0.1}>Add a new hue</H1>
-      <XStack flex={0.45}>
-        <YGroup alignSelf="center" bordered width={340} size="$5" separator={<Separator />}>
+    <XStack paddingVertical="$4" flex={1} flexDirection="column" alignItems="center" gap="$4">
+      <XStack flexDirection="column">
+        <Label fontSize={20} htmlFor="devices">
+          Select device
+        </Label>
+
+        <YGroup
+          id="devices"
+          alignSelf="center"
+          bordered
+          width={340}
+          size="$5"
+          separator={<Separator />}
+        >
           {mockup.map((device, index) => (
             <YGroup.Item key={index}>
               <ListItem
@@ -28,6 +55,12 @@ export default function ModalScreen() {
           ))}
         </YGroup>
       </XStack>
-    </View>
+
+      <XStack flex={1} alignItems="flex-end">
+        <Button variant="outlined" width={340}>
+          Complete
+        </Button>
+      </XStack>
+    </XStack>
   );
 }
