@@ -25,15 +25,13 @@ export async function getHueKey(IP: string) {
 }
 
 export async function getDevices(IP: string, key: string) {
-  let headersList = {
-    'hue-application-key': key,
-    'Content-Type': 'application/json',
-  }
+  let bodyContent = JSON.stringify({
+    key: key,
+  })
 
   try {
-    const response = await fetch(`https://${IP}/clip/v2/resource/device`, {
-      method: 'GET',
-      headers: headersList,
+    const response = await fetch(`http://localhost:3000/${IP}/${key}/devices`, {
+      method: 'POST',
     })
 
     const data = await response.json()
