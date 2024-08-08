@@ -9,7 +9,7 @@ const port = 3000
 app.use(cors())
 app.use(express.json())
 
-const BRIDGE_IP = '192.168.8.100'
+const BRIDGE_IP = 'http://192.168.8.100'
 const API_KEY = 'QeS0ULr6BoDhbcIQm40gvl8VqlqlVLc6T6AfXguU'
 
 const axiosInstance = axios.create({
@@ -40,7 +40,6 @@ app.put('/lights/:id/toggle', async (req, res) => {
 app.post('/:ip/:key/devices', async (req, res) => {
   const bridgeIP = req.params.ip
   const key = req.params.key
-  console.log('Server: ', bridgeIP, key)
 
   try {
     const response = await axiosInstance.get(

@@ -18,7 +18,6 @@ export default function TabSettings() {
   async function testConnection() {
     const bridgeIP = await getData('bridge-ip')
     const bridgeKey = await getData('bridge-key')
-    console.log('EXPO: ', bridgeIP, bridgeKey)
     const devices = await getDevices(bridgeIP as string, bridgeKey as string)
     console.log(devices)
   }
