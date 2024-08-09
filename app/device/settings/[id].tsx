@@ -1,18 +1,23 @@
-import { useLocalSearchParams } from 'expo-router'
-import React, { useState } from 'react'
-import { Button, Modal, StyleSheet, View } from 'react-native'
-
+import { useLocalSearchParams, useNavigation } from 'expo-router'
+import { Button } from 'tamagui'
 import ColorPicker, {
   Panel1,
   Swatches,
-  Preview,
-  OpacitySlider,
   HueSlider,
 } from 'reanimated-color-picker'
+import { YStack } from 'tamagui'
+import { Label } from 'tamagui'
+import { useEffect } from 'react'
 
 export default function DeviceSettings() {
+  const navigation = useNavigation()
   const { id } = useLocalSearchParams()
-  const [showModal, setShowModal] = useState(false)
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'Settings',
+    })
+  }, [id])
 
   // Note: 👇 This can be a `worklet` function.
   const onSelectColor = ({ hex }) => {
@@ -21,32 +26,23 @@ export default function DeviceSettings() {
   }
 
   return (
-    <View style={styles.container}>
-      <ColorPicker />
-      <Button title="Color Picker" onPress={() => setShowModal(true)} />
+    <YStack margin={'$4'} flex={1} gap={'$4'} alignItems="center">
+      <Label alignSelf="flex-start" fontSize={20}>
+        Color
+      </Label>
+      <ColorPicker
+        style={{ width: '100%', gap: 20 }}
+        value="red"
+        onComplete={onSelectColor}
+      >
+        <Panel1 />
+        <HueSlider />
+        <Swatches />
+      </ColorPicker>
 
-      <Modal visible={showModal} animationType="slide">
-        <ColorPicker
-          style={{ width: '70%' }}
-          value="red"
-          onComplete={onSelectColor}
-        >
-          <Preview />
-          <Panel1 />
-          <HueSlider />
-          <OpacitySlider />
-          <Swatches />
-        </ColorPicker>
-
-        <Button title="Ok" onPress={() => setShowModal(false)} />
-      </Modal>
-    </View>
+      <Button width={'50%'} onPress={() => null}>
+        <Button.Text>Ok</Button.Text>
+      </Button>
+    </YStack>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-})
