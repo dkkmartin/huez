@@ -1,29 +1,75 @@
-import { SlidersHorizontal, Lamp, Sun, SunDim } from '@tamagui/lucide-icons';
-import { Button, H2, XStack, Card, Slider } from 'tamagui';
-import { Device } from 'types/device';
+import { useEffect, useState } from 'react'
+import {
+  SlidersHorizontal,
+  Lamp,
+  Sun,
+  SunDim,
+  ChefHat,
+  Sofa,
+  Bath,
+  Car,
+  Briefcase,
+  LampCeiling,
+} from '@tamagui/lucide-icons'
+import { Button, H2, XStack, Card, Slider } from 'tamagui'
+import { JSX } from 'react/jsx-runtime'
+import { Link } from 'expo-router'
 
 export default function DeviceCard({
   deviceData,
   setCanScroll,
 }: {
-  deviceData: Device;
-  setCanScroll: (value: boolean) => void;
+  deviceData: { id: string; name: string; room: string }
+  setCanScroll: (value: boolean) => void
 }) {
+  const [icon, setIcon] = useState<JSX.Element | null>(null)
+
+  useEffect(() => {
+    let newIcon: JSX.Element
+    switch (deviceData.room) {
+      case 'kitchen':
+        newIcon = <ChefHat size={80} />
+        break
+      case 'living_room':
+        newIcon = <Sofa size={80} />
+        break
+      case 'bathroom':
+        newIcon = <Bath size={80} />
+        break
+      case 'garage':
+        newIcon = <Car size={80} />
+        break
+      case 'office':
+        newIcon = <Briefcase size={80} />
+        break
+      default:
+        newIcon = <LampCeiling size={80} />
+        break
+    }
+    setIcon(newIcon)
+  }, [deviceData.room])
+
   return (
     <Card bordered elevate width={360}>
       <Card.Header>
         <XStack justifyContent="space-between">
           <H2 size="$8" style={{ fontWeight: 'bold' }}>
-            {deviceData.metadata.name}
+            {deviceData.name}
           </H2>
-          <Button>
-            <SlidersHorizontal />
-          </Button>
+          <Link
+            href={{
+              //@ts-ignore
+              pathname: '/device/settings/[id]',
+              params: { id: deviceData.id },
+            }}
+          >
+            <Button>
+              <SlidersHorizontal />
+            </Button>
+          </Link>
         </XStack>
       </Card.Header>
-      <XStack justifyContent="center">
-        <Lamp size={80}></Lamp>
-      </XStack>
+      <XStack justifyContent="center">{icon}</XStack>
       <Card.Footer padded>
         <XStack alignItems="center" margin="auto" gap={8}>
           <SunDim></SunDim>
@@ -41,10 +87,9 @@ export default function DeviceCard({
             </Slider.Track>
             <Slider.Thumb circular index={0} />
           </Slider>
-
           <Sun></Sun>
         </XStack>
       </Card.Footer>
     </Card>
-  );
+  )
 }
