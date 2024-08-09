@@ -10,7 +10,6 @@ import {
 import { useFonts } from 'expo-font'
 import { SplashScreen, Stack } from 'expo-router'
 import { Provider } from './Provider'
-import ConnectBridge from 'components/connectBridge'
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -75,17 +74,6 @@ function RootLayoutNav() {
             name="modalNewGroup"
             options={{
               title: 'New group',
-              presentation: 'modal',
-              animation: 'slide_from_right',
-              gestureEnabled: true,
-              gestureDirection: 'horizontal',
-            }}
-          />
-
-          <Stack.Screen
-            name="modalDeviceSettings"
-            options={{
-              title: 'Device settings',
               presentation: 'modal',
               animation: 'slide_from_right',
               gestureEnabled: true,
