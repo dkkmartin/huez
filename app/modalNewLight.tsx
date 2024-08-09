@@ -17,25 +17,33 @@ import {
 } from 'tamagui'
 import { ListItem, Separator, XStack, YGroup } from 'tamagui'
 import { getDevices } from 'lib/hue'
-import { Root } from 'types/device'
+import { Device, Root } from 'types/device'
 import { SelectProps } from 'tamagui'
 import { YStack } from 'tamagui'
 import { LinearGradient } from 'react-native-svg'
 import { router } from 'expo-router'
 
+type LocalStorageDevice = {
+  id: string
+  name: string
+  room: string
+}
+
 export default function ModalScreen() {
   const [devices, setDevices] = useState<Root>()
-  const [selectedDevice, setSelectedDevice] = useState('')
-  const [val, setVal] = useState('Kitchen')
-  const [storedDevices, setStoredDevices] = useState([])
+  const [selectedDevice, setSelectedDevice] = useState<Device>()
+  const [val, setVal] = useState('Room')
+  const [storedDevices, setStoredDevices] = useState<LocalStorageDevice[]>([])
+  const [filteredDevices, setFilteredDevices] = useState<Root>()
 
-  function handleClick(id: string) {
-    setSelectedDevice(id)
+  function handleClick(device: Device) {
+    setSelectedDevice(device)
   }
 
   async function handleComplete() {
     const newDevice = {
-      id: selectedDevice,
+      id: selectedDevice?.id,
+      name: selectedDevice?.metadata?.name,
       room: val,
     }
     const existingDevices = await getObjectData('devices')
@@ -46,7 +54,7 @@ export default function ModalScreen() {
       storeObjectData('devices', [newDevice])
     }
     if (router.canGoBack()) {
-      router.back()
+      router.replace('/')
     }
   }
 
@@ -235,6 +243,16 @@ export default function ModalScreen() {
     getStoredDevices()
   }, [])
 
+  useEffect(() => {
+    if (!storedDevices) return
+    const filtered = devices?.data.filter(
+      (device) =>
+        !storedDevices.some((storedDevice) => storedDevice.id === device.id)
+    )
+    //@ts-ignore
+    setFilteredDevices(filtered)
+  }, [storedDevices, devices])
+
   return (
     <XStack
       paddingVertical="$4"
@@ -256,21 +274,38 @@ export default function ModalScreen() {
           size="$5"
           separator={<Separator />}
         >
-          {devices?.data.map((device, index) => (
-            <YGroup.Item key={index}>
-              <ListItem
-                backgroundColor={
-                  selectedDevice === device.id ? '$color.gray6Dark' : ''
-                }
-                hoverTheme
-                pressTheme
-                title={device.metadata.name}
-                subTitle={device.id}
-                iconAfter={ChevronRight}
-                onPress={() => handleClick(device.id)}
-              />
-            </YGroup.Item>
-          ))}
+          {storedDevices
+            ? //@ts-ignore
+              filteredDevices?.map((device, index) => (
+                <YGroup.Item key={index}>
+                  <ListItem
+                    backgroundColor={
+                      selectedDevice?.id === device.id ? '$color.gray6Dark' : ''
+                    }
+                    hoverTheme
+                    pressTheme
+                    title={device.metadata.name}
+                    subTitle={device.id}
+                    iconAfter={ChevronRight}
+                    onPress={() => handleClick(device)}
+                  />
+                </YGroup.Item>
+              ))
+            : devices?.data.map((device, index) => (
+                <YGroup.Item key={index}>
+                  <ListItem
+                    backgroundColor={
+                      selectedDevice?.id === device.id ? '$color.gray6Dark' : ''
+                    }
+                    hoverTheme
+                    pressTheme
+                    title={device.metadata.name}
+                    subTitle={device.id}
+                    iconAfter={ChevronRight}
+                    onPress={() => handleClick(device)}
+                  />
+                </YGroup.Item>
+              ))}
         </YGroup>
       </XStack>
 
