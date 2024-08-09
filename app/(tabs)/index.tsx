@@ -1,6 +1,6 @@
-import DeviceCard from 'components/device/deviceCard';
-import { useState } from 'react';
-import { ScrollView, XStack, YStack } from 'tamagui';
+import DeviceCard from 'components/device/deviceCard'
+import { useState } from 'react'
+import { ScrollView, XStack, YStack } from 'tamagui'
 // import { ToastControl } from 'app/CurrentToast';
 
 const mockup = {
@@ -155,17 +155,27 @@ const mockup = {
       type: 'device',
     },
   ],
-};
+}
 
 export default function TabOneScreen() {
-  const [canScroll, setCanScroll] = useState(true);
+  const [canScroll, setCanScroll] = useState(true)
   return (
     <ScrollView scrollEnabled={canScroll}>
-      <YStack maxWidth={360} margin="auto" marginVertical="$4" gap="$4" flex={1}>
+      <YStack
+        maxWidth={360}
+        margin="auto"
+        marginVertical="$4"
+        gap="$4"
+        flex={1}
+      >
         {mockup.data.map((device, index) => (
-          <DeviceCard setCanScroll={setCanScroll} key={index} deviceData={device} />
+          <DeviceCard
+            setCanScroll={setCanScroll}
+            key={index}
+            deviceData={device}
+          />
         ))}
       </YStack>
     </ScrollView>
-  );
+  )
 }
