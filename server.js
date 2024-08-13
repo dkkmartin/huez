@@ -39,19 +39,24 @@ app.put('/lights/:id/toggle', async (req, res) => {
 })
 
 // Change deivce brightness
-app.put('/lights/:id/brightness', async (req, res) => {
+app.post('/:ip/:key/:id/brightness', async (req, res) => {
+  const bridgeIP = req.params.ip
+  const key = req.params.key
   const lightId = req.params.id
   const { brightness } = req.body
 
   try {
     const response = await axiosInstance.put(
-      `https://${BRIDGE_IP}/clip/v2/resource/light/${lightId}`,
-      { bri: Math.round((brightness / 100) * 254) },
-      { headers: { 'hue-application-key': API_KEY } }
+      `https://${bridgeIP}/clip/v2/resource/light/${lightId}`,
+      {
+        dimming: {
+          brightness: Number(brightness),
+        },
+      },
+      { headers: { 'hue-application-key': key } }
     )
     res.json(response.data)
   } catch (error) {
-    console.error(error) // Log the error for debugging
     res
       .status(500)
       .json({ error: error.response ? error.response.data : error.message })
