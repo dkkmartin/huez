@@ -18,6 +18,7 @@ const axiosInstance = axios.create({
   }),
 })
 
+// Toggle device
 app.put('/lights/:id/toggle', async (req, res) => {
   const lightId = req.params.id
   const { on } = req.body
@@ -30,6 +31,27 @@ app.put('/lights/:id/toggle', async (req, res) => {
     )
     res.json(response.data)
   } catch (error) {
+    console.error(error) // Log the error for debugging
+    res
+      .status(500)
+      .json({ error: error.response ? error.response.data : error.message })
+  }
+})
+
+// Change deivce brightness
+app.put('/lights/:id/brightness', async (req, res) => {
+  const lightId = req.params.id
+  const { brightness } = req.body
+
+  try {
+    const response = await axiosInstance.put(
+      `https://${BRIDGE_IP}/clip/v2/resource/light/${lightId}`,
+      { bri: Math.round((brightness / 100) * 254) },
+      { headers: { 'hue-application-key': API_KEY } }
+    )
+    res.json(response.data)
+  } catch (error) {
+    console.error(error) // Log the error for debugging
     res
       .status(500)
       .json({ error: error.response ? error.response.data : error.message })
@@ -49,24 +71,28 @@ app.post('/:ip/:key/devices', async (req, res) => {
 
     res.json(response.data)
   } catch (error) {
+    console.error(error) // Log the error for debugging
     res
       .status(500)
       .json({ error: error.response ? error.response.data : error.message })
   }
 })
 
-app.put('/lights/:id/brightness', async (req, res) => {
+// List device information
+app.get('/:ip/:key/:id/device', async (req, res) => {
+  const bridgeIP = req.params.ip
+  const key = req.params.key
   const lightId = req.params.id
-  const { brightness } = req.body
 
   try {
-    const response = await axiosInstance.put(
-      `https://${BRIDGE_IP}/clip/v2/resource/light/${lightId}`,
-      { bri: Math.round((brightness / 100) * 254) },
-      { headers: { 'hue-application-key': API_KEY } }
+    const response = await axiosInstance.get(
+      `https://${bridgeIP}/clip/v2/resource/device/${lightId}`,
+      { headers: { 'hue-application-key': key } }
     )
+
     res.json(response.data)
   } catch (error) {
+    console.error(error) // Log the error for debugging
     res
       .status(500)
       .json({ error: error.response ? error.response.data : error.message })
@@ -74,16 +100,25 @@ app.put('/lights/:id/brightness', async (req, res) => {
 })
 
 // Route to change color
-app.put('/lights/:id/color', async (req, res) => {
+app.post('/:ip/:key/:id/color', async (req, res) => {
+  const bridgeIP = req.params.ip
+  const key = req.params.key
   const lightId = req.params.id
   const { color } = req.body
 
   try {
     const xyColor = hexToXY(color)
     const response = await axiosInstance.put(
-      `https://${BRIDGE_IP}/clip/v2/resource/light/${lightId}`,
-      { xy: xyColor },
-      { headers: { 'hue-application-key': API_KEY } }
+      `https://${bridgeIP}/clip/v2/resource/light/${lightId}`,
+      {
+        color: {
+          xy: {
+            x: xyColor[0],
+            y: xyColor[1],
+          },
+        },
+      },
+      { headers: { 'hue-application-key': key } }
     )
     res.json(response.data)
   } catch (error) {
