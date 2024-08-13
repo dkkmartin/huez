@@ -1,12 +1,12 @@
 import { useLocalSearchParams, useNavigation } from 'expo-router'
-import { Button, Slider, XStack } from 'tamagui'
+import { Button } from 'tamagui'
 import ColorPicker, { Panel3, HueSlider } from 'reanimated-color-picker'
 import { YStack } from 'tamagui'
 import { useEffect, useState } from 'react'
 import { changeColor, getDeviceInfo } from 'lib/hue'
 import { getData } from 'lib/asyncStorage'
 import { Root } from 'types/device'
-import { Sun, SunDim } from '@tamagui/lucide-icons'
+import LightSlider from 'components/device/lightSlider'
 
 export default function DeviceSettings() {
   const navigation = useNavigation()
@@ -49,39 +49,23 @@ export default function DeviceSettings() {
     )
   }
 
-  return (
-    <YStack margin={'$4'} flex={1} gap={'$4'}>
-      <ColorPicker
-        style={{ width: '100%', gap: 20 }}
-        value="red"
-        onComplete={onSelectColor}
-      >
-        <Panel3 />
-        <HueSlider />
-      </ColorPicker>
-
-      <XStack alignItems="center" margin="auto" gap={8}>
-        <SunDim></SunDim>
-        <Slider
-          onSlideMove={() => null}
-          onSlideEnd={() => null}
-          size="$2"
-          width={'$20'}
-          defaultValue={[50]}
-          max={100}
-          step={1}
+  if (bridgeIP && bridgeKey)
+    return (
+      <YStack margin={'$4'} flex={1} gap="$10" alignItems="center">
+        <ColorPicker
+          style={{ width: '100%', gap: 20 }}
+          value="red"
+          onComplete={onSelectColor}
         >
-          <Slider.Track>
-            <Slider.TrackActive />
-          </Slider.Track>
-          <Slider.Thumb circular index={0} />
-        </Slider>
-        <Sun></Sun>
-      </XStack>
+          <Panel3 />
+          <HueSlider />
+        </ColorPicker>
 
-      <Button width={'50%'} onPress={() => null}>
-        <Button.Text>Ok</Button.Text>
-      </Button>
-    </YStack>
-  )
+        <LightSlider IP={bridgeIP} ID={id as string} />
+
+        <Button width={'50%'} onPress={() => null}>
+          <Button.Text>Ok</Button.Text>
+        </Button>
+      </YStack>
+    )
 }
