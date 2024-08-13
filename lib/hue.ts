@@ -84,3 +84,36 @@ export async function changeColor(
     return error
   }
 }
+
+export async function changeBrightness(
+  IP: string,
+  key: string,
+  ID: string,
+  brightness: number
+) {
+  let bodyContent = JSON.stringify({
+    brightness: brightness,
+  })
+
+  let headersList = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  }
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/${IP}/${key}/${ID}/brightness`,
+      {
+        method: 'POST',
+        body: bodyContent,
+        headers: headersList,
+      }
+    )
+
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.log(error)
+    return error
+  }
+}
