@@ -1,22 +1,25 @@
-import { Check, ChevronDown, ChevronRight, ChevronUp } from '@tamagui/lucide-icons';
-import { useMemo, useState } from 'react';
-import { LinearGradient } from 'react-native-svg';
-import { Button, Label } from 'tamagui';
-import { SelectProps } from 'tamagui';
+import {
+  Check,
+  ChevronDown,
+  ChevronRight,
+  ChevronUp,
+} from '@tamagui/lucide-icons'
+import { useMemo, useState } from 'react'
+import { LinearGradient } from 'react-native-svg'
+import { Button, Label } from 'tamagui'
+import { SelectProps } from 'tamagui'
 import {
   Adapt,
   FontSizeTokens,
-  H1,
   ListItem,
   Separator,
   Sheet,
-  View,
   XStack,
   YGroup,
   YStack,
   getFontSize,
-} from 'tamagui';
-import { Select } from 'tamagui';
+} from 'tamagui'
+import { Select } from 'tamagui'
 
 const mockup = [
   { id: '21dsan39da', name: 'Hue bulb' },
@@ -24,7 +27,7 @@ const mockup = [
   { id: '22121dak33', name: 'Hue bulb' },
   { id: '5s12dy4321', name: 'Hue bulb' },
   { id: 'doo30as022', name: 'Hue bulb' },
-];
+]
 
 const items = [
   { name: 'Living room', key: 'living_room' },
@@ -67,13 +70,18 @@ const items = [
   { name: 'Barbecue area', key: 'barbecue' },
   { name: 'Pool', key: 'pool' },
   { name: 'Other', key: 'other' },
-];
+]
 
 function SelectItem(props: SelectProps) {
-  const [val, setVal] = useState('Kitchen');
+  const [val, setVal] = useState('Kitchen')
 
   return (
-    <Select value={val} onValueChange={setVal} disablePreventBodyScroll {...props}>
+    <Select
+      value={val}
+      onValueChange={setVal}
+      disablePreventBodyScroll
+      {...props}
+    >
       <Select.Trigger width={340} iconAfter={ChevronDown}>
         <Select.Value placeholder="Bedroom" />
       </Select.Trigger>
@@ -95,7 +103,11 @@ function SelectItem(props: SelectProps) {
               <Adapt.Contents />
             </Sheet.ScrollView>
           </Sheet.Frame>
-          <Sheet.Overlay animation="lazy" enterStyle={{ opacity: 0 }} exitStyle={{ opacity: 0 }} />
+          <Sheet.Overlay
+            animation="lazy"
+            enterStyle={{ opacity: 0 }}
+            exitStyle={{ opacity: 0 }}
+          />
         </Sheet>
       </Adapt>
 
@@ -128,13 +140,17 @@ function SelectItem(props: SelectProps) {
               () =>
                 items.map((item, i) => {
                   return (
-                    <Select.Item index={i} key={item.name} value={item.name.toLowerCase()}>
+                    <Select.Item
+                      index={i}
+                      key={item.name}
+                      value={item.name.toLowerCase()}
+                    >
                       <Select.ItemText>{item.name}</Select.ItemText>
                       <Select.ItemIndicator marginLeft="auto">
                         <Check size={16} />
                       </Select.ItemIndicator>
                     </Select.Item>
-                  );
+                  )
                 }),
               [items]
             )}
@@ -151,7 +167,9 @@ function SelectItem(props: SelectProps) {
               width={'$4'}
               pointerEvents="none"
             >
-              <ChevronDown size={getFontSize((props.size as FontSizeTokens) ?? '$true')} />
+              <ChevronDown
+                size={getFontSize((props.size as FontSizeTokens) ?? '$true')}
+              />
             </YStack>
           )}
         </Select.Viewport>
@@ -177,12 +195,18 @@ function SelectItem(props: SelectProps) {
         </Select.ScrollDownButton>
       </Select.Content>
     </Select>
-  );
+  )
 }
 
 export default function ModalScreen() {
   return (
-    <XStack paddingVertical="$4" flex={1} flexDirection="column" alignItems="center" gap="$4">
+    <XStack
+      paddingVertical="$4"
+      flex={1}
+      flexDirection="column"
+      alignItems="center"
+      gap="$4"
+    >
       <XStack flexDirection="column" width={340}>
         <Label fontSize={20} htmlFor="select">
           Select a room type
@@ -223,5 +247,5 @@ export default function ModalScreen() {
         </Button>
       </XStack>
     </XStack>
-  );
+  )
 }
