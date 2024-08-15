@@ -27,6 +27,7 @@ type LocalStorageDevice = {
   id: string
   name: string
   room: string
+  lightRid: string
 }
 
 export default function ModalScreen() {
@@ -45,6 +46,7 @@ export default function ModalScreen() {
       id: selectedDevice?.id,
       name: selectedDevice?.metadata?.name,
       room: val,
+      lightRid: selectedDevice?.services[1].rid,
     }
     const existingDevices = await getObjectData('devices')
     if (Array.isArray(existingDevices)) {
@@ -256,7 +258,6 @@ export default function ModalScreen() {
   return (
     <XStack
       paddingVertical="$4"
-      flex={1}
       flexDirection="column"
       alignItems="center"
       gap="$4"
@@ -272,6 +273,8 @@ export default function ModalScreen() {
           bordered
           width={340}
           size="$5"
+          height={500}
+          overflow="scroll"
           separator={<Separator />}
         >
           {storedDevices
