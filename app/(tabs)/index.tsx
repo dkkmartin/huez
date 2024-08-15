@@ -1,7 +1,7 @@
 import DeviceCard from 'components/device/deviceCard'
 import { getObjectData } from 'lib/asyncStorage'
 import { useEffect, useState } from 'react'
-import { ScrollView, XStack, YStack } from 'tamagui'
+import { ScrollView, YStack } from 'tamagui'
 // import { ToastControl } from 'app/CurrentToast';
 
 export default function TabOneScreen() {
