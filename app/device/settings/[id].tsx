@@ -61,11 +61,11 @@ export default function DeviceSettings() {
           <HueSlider />
         </ColorPicker>
 
-        <LightSlider IP={bridgeIP} ID={id as string} />
-
-        <Button width={'50%'} onPress={() => null}>
-          <Button.Text>Ok</Button.Text>
-        </Button>
+        <LightSlider
+          IP={bridgeIP}
+          ID={deviceInfo?.data[0].id as string}
+          RID={deviceInfo?.data[0].services[1].rid as string}
+        />
       </YStack>
     )
 }
