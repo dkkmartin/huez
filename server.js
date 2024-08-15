@@ -63,6 +63,26 @@ app.post('/:ip/:key/:id/brightness', async (req, res) => {
   }
 })
 
+// Check deivce brightness
+app.get('/:ip/:key/:id/check-brightness', async (req, res) => {
+  const bridgeIP = req.params.ip
+  const key = req.params.key
+  const lightId = req.params.id
+
+  try {
+    const response = await axiosInstance.get(
+      `https://${bridgeIP}/clip/v2/resource/light/${lightId}`,
+
+      { headers: { 'hue-application-key': key } }
+    )
+    res.json(response.data)
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: error.response ? error.response.data : error.message })
+  }
+})
+
 // List devices on bridge
 app.post('/:ip/:key/devices', async (req, res) => {
   const bridgeIP = req.params.ip
