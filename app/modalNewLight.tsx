@@ -48,6 +48,7 @@ export default function ModalScreen() {
       room: val,
       lightRid: selectedDevice?.services[1].rid,
     }
+
     const existingDevices = await getObjectData('devices')
     if (Array.isArray(existingDevices)) {
       const newDevices = [...existingDevices, newDevice]
@@ -55,6 +56,25 @@ export default function ModalScreen() {
     } else {
       storeObjectData('devices', [newDevice])
     }
+
+    const newGroup = {
+      name: val,
+      devices: [newDevice],
+    }
+
+    const existingGroups = await getObjectData('groups')
+    if (Array.isArray(existingGroups)) {
+      const groupIndex = existingGroups.findIndex((group) => group.name === val)
+      if (groupIndex !== -1) {
+        existingGroups[groupIndex].devices.push(newDevice)
+      } else {
+        existingGroups.push(newGroup)
+      }
+      storeObjectData('groups', existingGroups)
+    } else {
+      storeObjectData('groups', [newGroup])
+    }
+
     if (router.canGoBack()) {
       router.replace('/')
     }
