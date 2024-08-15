@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react'
 import {
   SlidersHorizontal,
-  Lamp,
-  Sun,
-  SunDim,
   ChefHat,
   Sofa,
   Bath,
@@ -11,18 +8,29 @@ import {
   Briefcase,
   LampCeiling,
 } from '@tamagui/lucide-icons'
-import { Button, H2, XStack, Card, Slider } from 'tamagui'
+import { Button, H2, XStack, Card, Slider, H1 } from 'tamagui'
 import { JSX } from 'react/jsx-runtime'
 import { Link } from 'expo-router'
+import LightSlider from './lightSlider'
+import { getData } from 'lib/asyncStorage'
 
 export default function DeviceCard({
   deviceData,
   setCanScroll,
 }: {
-  deviceData: { id: string; name: string; room: string }
+  deviceData: { id: string; name: string; room: string; lightRid: string }
   setCanScroll: (value: boolean) => void
 }) {
   const [icon, setIcon] = useState<JSX.Element | null>(null)
+  const [bridgeIP, setBridgeIP] = useState('')
+
+  useEffect(() => {
+    async function getStorage() {
+      const bridgeIP = await getData('bridge-ip')
+      setBridgeIP(bridgeIP as string)
+    }
+    getStorage()
+  }, [])
 
   useEffect(() => {
     let newIcon: JSX.Element
@@ -53,9 +61,14 @@ export default function DeviceCard({
     <Card bordered elevate width={360}>
       <Card.Header>
         <XStack justifyContent="space-between">
-          <H2 size="$8" style={{ fontWeight: 'bold' }}>
-            {deviceData.name}
-          </H2>
+          <XStack flexDirection="column">
+            <H1 size="$8" style={{ fontWeight: 'bold' }}>
+              {deviceData.name}
+            </H1>
+            <H2 size="$1" style={{ fontWeight: 'lighter' }}>
+              {deviceData.room}
+            </H2>
+          </XStack>
           <Link
             href={{
               //@ts-ignore
@@ -71,24 +84,11 @@ export default function DeviceCard({
       </Card.Header>
       <XStack justifyContent="center">{icon}</XStack>
       <Card.Footer padded>
-        <XStack alignItems="center" margin="auto" gap={8}>
-          <SunDim></SunDim>
-          <Slider
-            onSlideMove={() => setCanScroll(false)}
-            onSlideEnd={() => setCanScroll(true)}
-            size="$2"
-            width={250}
-            defaultValue={[50]}
-            max={100}
-            step={1}
-          >
-            <Slider.Track>
-              <Slider.TrackActive />
-            </Slider.Track>
-            <Slider.Thumb circular index={0} />
-          </Slider>
-          <Sun></Sun>
-        </XStack>
+        <LightSlider
+          IP={bridgeIP}
+          ID={deviceData.id}
+          RID={deviceData.lightRid}
+        />
       </Card.Footer>
     </Card>
   )
