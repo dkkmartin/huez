@@ -117,3 +117,26 @@ export async function changeBrightness(
     return error
   }
 }
+
+export async function getBrightness(IP: string, key: string, ID: string) {
+  let headersList = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  }
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/${IP}/${key}/${ID}/check-brightness`,
+      {
+        method: 'GET',
+        headers: headersList,
+      }
+    )
+
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.log(error)
+    return error
+  }
+}
