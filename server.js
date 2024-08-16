@@ -117,14 +117,141 @@ app.get('/:ip/:key/:id/device', async (req, res) => {
 
     res.json(response.data)
   } catch (error) {
-    console.error(error) // Log the error for debugging
     res
       .status(500)
       .json({ error: error.response ? error.response.data : error.message })
   }
 })
 
-// Route to change color
+// Get all rooms
+app.get('/:ip/:key/rooms', async (req, res) => {
+  const bridgeIP = req.params.ip
+  const key = req.params.key
+
+  try {
+    const response = await axiosInstance.get(
+      `https://${bridgeIP}/clip/v2/resource/room`,
+      { headers: { 'hue-application-key': key } }
+    )
+    res.json(response.data)
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: error.response ? error.response.data : error.message })
+  }
+})
+
+// Get one room
+app.get('/:ip/:key/room/:id', async (req, res) => {
+  const bridgeIP = req.params.ip
+  const key = req.params.key
+  const roomId = req.params.id
+
+  try {
+    const response = await axiosInstance.get(
+      `https://${bridgeIP}/clip/v2/resource/room/${roomId}`,
+      { headers: { 'hue-application-key': key } }
+    )
+    res.json(response.data)
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: error.response ? error.response.data : error.message })
+  }
+})
+
+// Get all grouped_light
+app.get('/:ip/:key/grouped_light', async (req, res) => {
+  const bridgeIP = req.params.ip
+  const key = req.params.key
+
+  try {
+    const response = await axiosInstance.get(
+      `https://${bridgeIP}/clip/v2/resource/grouped_light`,
+      { headers: { 'hue-application-key': key } }
+    )
+    res.json(response.data)
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: error.response ? error.response.data : error.message })
+  }
+})
+
+// Get grouped_light info
+app.get('/:ip/:key/grouped_light/:id', async (req, res) => {
+  const bridgeIP = req.params.ip
+  const key = req.params.key
+  const groupId = req.params.id
+
+  try {
+    const response = await axiosInstance.get(
+      `https://${bridgeIP}/clip/v2/resource/grouped_light/${groupId}`,
+      { headers: { 'hue-application-key': key } }
+    )
+    res.json(response.data)
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: error.response ? error.response.data : error.message })
+  }
+})
+
+// Change gropued_light color
+app.post('/:ip/:key/:id/room/color', async (req, res) => {
+  const bridgeIP = req.params.ip
+  const key = req.params.key
+  const groupId = req.params.id
+  const { color } = req.body
+
+  try {
+    const xyColor = hexToXY(color)
+    const response = await axiosInstance.put(
+      `https://${bridgeIP}/clip/v2/resource/grouped_light/${groupId}`,
+      {
+        color: {
+          xy: {
+            x: xyColor[0],
+            y: xyColor[1],
+          },
+        },
+      },
+      { headers: { 'hue-application-key': key } }
+    )
+    res.json(response.data)
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: error.response ? error.response.data : error.message })
+  }
+})
+
+// Change group brightness
+app.post('/:ip/:key/:id/room/brightness', async (req, res) => {
+  const bridgeIP = req.params.ip
+  const key = req.params.key
+  const groupId = req.params.id
+  const { brightness } = req.body
+
+  try {
+    const response = await axiosInstance.put(
+      `https://${bridgeIP}/clip/v2/resource/grouped_light/${groupId}`,
+      {
+        dimming: {
+          brightness: Number(brightness),
+        },
+      },
+      { headers: { 'hue-application-key': key } }
+    )
+    res.json(response.data)
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: error.response ? error.response.data : error.message })
+  }
+})
+
+// Change device color
 app.post('/:ip/:key/:id/color', async (req, res) => {
   const bridgeIP = req.params.ip
   const key = req.params.key
