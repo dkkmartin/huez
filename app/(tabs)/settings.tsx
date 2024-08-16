@@ -41,7 +41,7 @@ export default function TabSettings() {
         </Button>
       </Link>
       <Button onPress={testConnection} size={'$5'} variant="outlined">
-        Test
+        Test connection
       </Button>
     </YStack>
   )
