@@ -13,29 +13,31 @@ export default function TabGroups() {
     async function getGroups() {
       const bridgeIP = await getData('bridge-ip')
       const bridgeKey = await getData('bridge-key')
+      if (!bridgeIP && !bridgeKey) return
       const response = await getRooms(bridgeIP as string, bridgeKey as string)
       setGroups(response)
     }
     getGroups()
   }, [])
 
-  return (
-    <ScrollView scrollEnabled={canScroll}>
-      <YStack
-        maxWidth={360}
-        margin="auto"
-        marginVertical="$4"
-        gap="$4"
-        flex={1}
-      >
-        {groups?.data.map((group, index) => (
-          <GroupCard
-            setCanScroll={setCanScroll}
-            key={index}
-            groupData={group}
-          />
-        ))}
-      </YStack>
-    </ScrollView>
-  )
+  if (groups?.data)
+    return (
+      <ScrollView scrollEnabled={canScroll}>
+        <YStack
+          maxWidth={360}
+          margin="auto"
+          marginVertical="$4"
+          gap="$4"
+          flex={1}
+        >
+          {groups?.data.map((group, index) => (
+            <GroupCard
+              setCanScroll={setCanScroll}
+              key={index}
+              groupData={group}
+            />
+          ))}
+        </YStack>
+      </ScrollView>
+    )
 }
