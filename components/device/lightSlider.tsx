@@ -29,11 +29,19 @@ export default function LightSlider({
     useCallback(() => {
       setDeviceInfo(undefined)
       if (!bridgeKey || !ID) return
-      async function fetchDeviceInfo() {
+
+      // if going into settings and then go back the first fetch for brightness info is gonna fail...
+      // Recursive calling itself until its working with a max of 10 tries
+      async function fetchDeviceInfoWithRetry(attempt = 1) {
         const response = await getBrightness(IP, bridgeKey, RID)
-        setDeviceInfo(response)
+        if (response.data === undefined && attempt < 10) {
+          setTimeout(() => fetchDeviceInfoWithRetry(attempt + 1), 1000)
+        } else {
+          setDeviceInfo(response)
+        }
       }
-      fetchDeviceInfo()
+
+      fetchDeviceInfoWithRetry()
 
       return () => {}
     }, [bridgeKey, ID])
@@ -43,12 +51,11 @@ export default function LightSlider({
     async function getBridgeKey() {
       const bridgeKey = await getData('bridge-key')
       setBridgeKey(bridgeKey as string)
-      console.log('refreshed')
     }
     getBridgeKey()
   }, [])
 
-  if (deviceInfo)
+  if (deviceInfo?.data[0])
     return (
       <XStack alignItems="center" gap={8} width="100%" justifyContent="center">
         <SunDim></SunDim>
@@ -57,7 +64,11 @@ export default function LightSlider({
           maxWidth={300}
           onSlideEnd={(event, value) => brightness(value)}
           size="$2"
-          defaultValue={[deviceInfo?.data[0].dimming.brightness as number]}
+          defaultValue={
+            deviceInfo.data[0].dimming
+              ? [deviceInfo?.data[0]?.dimming?.brightness as number]
+              : [50]
+          }
           max={100}
           step={1}
         >
